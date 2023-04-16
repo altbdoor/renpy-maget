@@ -1,6 +1,7 @@
 ﻿# The script of the game goes in this file.
-
+default health = 100
 default energy = 100
+default days = 14
 
 # Declare characters used by this game. The color argument colorizes the
 # name of the character.
@@ -8,6 +9,7 @@ define magomet = Character("Magomet", color='#ff0000')
 
 # The game starts here.
 label start:
+    show screen stats
 
     # Show a background. This uses a placeholder by default, but you can
     # add a file (named either "bg room.png" or "bg room.jpg") to the
@@ -29,7 +31,7 @@ menu:
     "huh"
 
     "yes":
-        pass
+        $ energy -= 20
     "no":
         pass
 

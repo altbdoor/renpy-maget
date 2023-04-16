@@ -1503,3 +1503,49 @@ style slider_vbox:
 style slider_slider:
     variant "small"
     xsize 900
+
+################################################################################
+
+screen stats():
+    zorder 200
+
+    frame:
+        background "black"
+        padding (10, 10)
+        pos (10, 10)
+
+        $ stat_left_col_width = 120
+        $ stat_text_size = 24
+        $ stat_bar_width = 200
+        $ stat_bar_height = 20
+        $ stat_bar_delay = 0.2
+
+        vbox:
+            spacing 5
+
+            hbox:
+                spacing 10
+                hbox:
+                    xsize stat_left_col_width
+                    text "Days" xalign 1.0 size stat_text_size
+                hbox:
+                    yalign 0.5
+                    text "( [days] / 14 )" size stat_text_size
+            hbox:
+                spacing 10
+                hbox:
+                    xsize stat_left_col_width
+                    text "Health" xalign 1.0 size stat_text_size
+                hbox:
+                    yalign 0.5
+                    bar value AnimatedValue(health, 100, delay=stat_bar_delay):
+                        xysize (stat_bar_width, stat_bar_height)
+            hbox:
+                spacing 10
+                hbox:
+                    xsize stat_left_col_width
+                    text "Energy" xalign 1.0 size stat_text_size
+                hbox:
+                    yalign 0.5
+                    bar value AnimatedValue(energy, 100, delay=stat_bar_delay):
+                        xysize (stat_bar_width, stat_bar_height)
