@@ -196,6 +196,8 @@ init python:
     build.documentation('*.html')
     build.documentation('*.txt')
 
+    config.font_replacement_map["gui/Anonymous Pro.ttf", True, False] = ("gui/Anonymous Pro B.ttf", False, False)
+
 
 ## A Google Play license key is required to download expansion files and perform
 ## in-app purchases. It can be found on the "Services & APIs" page of the Google

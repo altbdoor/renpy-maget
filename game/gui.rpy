@@ -58,7 +58,7 @@ define gui.interface_text_color = '#ffffff'
 define gui.text_font = "gui/Anonymous Pro.ttf"
 
 ## The font used for character names.
-define gui.name_text_font = "gui/Anonymous Pro.ttf"
+define gui.name_text_font = "gui/Anonymous Pro B.ttf"
 
 ## The font used for out-of-game text.
 define gui.interface_text_font = "gui/Anonymous Pro.ttf"

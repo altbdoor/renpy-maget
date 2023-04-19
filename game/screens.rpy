@@ -1530,7 +1530,7 @@ screen stats():
                     text "Days" xalign 1.0 size stat_text_size
                 hbox:
                     yalign 0.5
-                    text "( [days] / 14 )" size stat_text_size
+                    text "( [current_day] / [total_days] )" size stat_text_size
             hbox:
                 spacing 10
                 hbox:
