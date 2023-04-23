@@ -1527,10 +1527,20 @@ screen stats():
                 spacing 10
                 hbox:
                     xsize stat_left_col_width
-                    text "Days" xalign 1.0 size stat_text_size
+                    text "Gold" xalign 1.0 size stat_text_size
                 hbox:
                     yalign 0.5
-                    text "( [current_day] / [total_days] )" size stat_text_size
+                    $ gold_total_display = f"{gold_total:,}"
+                    $ gold_goal_display = f"{gold_goal:,}"
+                    text "[gold_total_display] / [gold_goal_display]" size stat_text_size
+            hbox:
+                spacing 10
+                hbox:
+                    xsize stat_left_col_width
+                    text "Hours" xalign 1.0 size stat_text_size
+                hbox:
+                    yalign 0.5
+                    text "[hour_current] / [hour_max]" size stat_text_size
             hbox:
                 spacing 10
                 hbox:
