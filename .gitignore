@@ -29,3 +29,5 @@ traceback.txt
 files.txt
 
 # End of https://www.toptal.com/developers/gitignore/api/renpy
+
+*-dists/
