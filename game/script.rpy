@@ -63,14 +63,14 @@ label start:
     hero "Alright, we doing this. I'm gonna stream with the boys, play some pumped up Rus-{w=1.0} Spanish music,{w=1.0} and grind."
     hero "And then..."
 
-    hide hero
-    show lady
     show bg dream
+    show hero at left
+    show lady at right
     with dissolve
 
     hero "She will feel my love for her!"
 
-    show hero
+    show hero at center
     hide lady
     show bg room
     with dissolve
@@ -106,6 +106,9 @@ label tutorial_start:
 
     Energy shows... your energy.
     """
+
+label tutorial_start_punch:
+    pass
 
 menu:
     "Try punching yourself for a bit!"
@@ -146,7 +149,7 @@ menu:
             "But sure, good luck!"
             jump start_day
 
-        jump tutorial_punch
+        jump tutorial_start_punch
 
 label start_day:
     hero "It is a fresh day, day 1!"
@@ -161,38 +164,46 @@ label day_actions:
 
     if hour_current == 1:
         hero "Plenty of things to do!"
-    if energy == 0:
-        show hero tired_max
-        hero "I'm completely wasted... I need some sleep!"
+
+    elif energy == 0:
+        if 'tired_max' not in renpy.get_attributes(tag="hero"):
+            show hero tired_max
+            with dissolve
+
+        hero "I'm completely wasted... I need to get some sleep!"
+
     elif energy <= 20:
-        show hero tired_medium
+        if 'tired_medium' not in renpy.get_attributes(tag="hero"):
+            show hero tired_medium
+            with dissolve
+
         hero "I'm getting kinda tired..."
 
 menu:
     "Play game":
-        $ actions.append('game')
-
         if energy + grind_energy <= 0:
-            "Not enough energy for now..."
-        else:
-            $ energy = clamp(energy + grind_energy, 0, 100)
-            $ hour_current += grind_hour
+            hero "I don't have enough energy to grind the game right now..."
+            jump day_actions
 
-            $ current_gold = renpy.random.randint(20000, 50000)
-            $ current_gold_display = f"{current_gold:,}"
+        $ actions.append('game')
+        $ energy = clamp(energy + grind_energy, 0, 100)
+        $ hour_current += grind_hour
 
-            $ gold_total += current_gold
-            "You have grinded [current_gold_display] gold!"
+        $ current_gold = renpy.random.randint(20000, 50000)
+        $ current_gold_display = f"{current_gold:,}"
+
+        $ gold_total += current_gold
+        "You have grinded [current_gold_display] gold!"
 
         jump day_actions
 
-    "Check room":
-        $ actions.append('check_room')
-        jump check_room
+    # "Check room":
+    #     $ actions.append('check_room')
+    #     jump check_room
 
-    "Drink BlueCow":
+    "Drink a BlueCow":
         if energy == 0:
-            hero "I am too weak right now... I should get some sleep."
+            hero "I am too weak for a BlueCow right now... I should get some sleep."
             jump day_actions
 
         $ actions.append('redbull')
@@ -274,17 +285,17 @@ menu:
 # ========================================
 # check room
 # ========================================
-label check_room:
-    show bg room_side
-    with dissolve
+# label check_room:
+#     show bg room_side
+#     with dissolve
 
-menu:
-    "Check EasyPeasyMethod book":
-        "Nice book"
-        jump check_room
+# menu:
+#     "Check EasyPeasyMethod book":
+#         "Nice book"
+#         jump check_room
 
-    "Back to actions":
-        jump day_actions
+#     "Back to actions":
+#         jump day_actions
 
 # ========================================
 # redbull overdose
