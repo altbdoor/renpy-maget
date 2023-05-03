@@ -23,7 +23,7 @@ define gui.show_name = False
 
 ## The version of the game.
 
-define config.version = "0.1"
+define config.version = "0.2"
 
 
 ## Text that is placed on the game's about screen. Place the text between the
@@ -186,6 +186,7 @@ init python:
     build.classify('**/thumbs.db', None)
     build.classify('**.md', None)
     build.classify('**/*-dists/**', None)
+    build.classify('**/dist/**', None)
 
     ## To archive files, classify them as 'archive'.
 
@@ -195,8 +196,8 @@ init python:
     ## Files matching documentation patterns are duplicated in a mac app build,
     ## so they appear in both the app and the zip file.
 
-    build.documentation('*.html')
-    build.documentation('*.txt')
+    # build.documentation('*.html')
+    # build.documentation('*.txt')
 
     config.font_replacement_map["gui/Anonymous Pro.ttf", True, False] = ("gui/Anonymous Pro B.ttf", False, False)
 
