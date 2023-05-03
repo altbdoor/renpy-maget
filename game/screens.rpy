@@ -1530,9 +1530,9 @@ screen stats():
                     text "Gold" xalign 1.0 size stat_text_size
                 hbox:
                     yalign 0.5
-                    $ gold_total_display = f"{gold_total:,}"
+                    $ gold_amount_display = f"{gold_amount:,}"
                     $ gold_goal_display = f"{gold_goal:,}"
-                    text "[gold_total_display] / [gold_goal_display]" size stat_text_size
+                    text "[gold_amount_display] / [gold_goal_display]" size stat_text_size
             hbox:
                 spacing 10
                 hbox:

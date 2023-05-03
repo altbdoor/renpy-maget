@@ -6,8 +6,10 @@ default energy = 100
 default hour_current = 1
 default hour_max = 20 * 24
 
+default lady_name = "Bangs"
+
 default gold_goal = 2000000
-default gold_total = 0
+default gold_amount = 0
 
 default tutorial_started = False
 default tutorial_skip_self_punch = False
@@ -28,7 +30,7 @@ default sleep_energy = 80
 # ========================================
 # characters
 # ========================================
-define hero = Character("Magut", color='#ff0000')
+define hero = Character("Magut", color="#ff0000")
 define lady = Character("Bangs", color="#0000ff")
 
 # ========================================
@@ -45,11 +47,11 @@ label start:
     """
     *Alarm sounds*
 
-    You wake up feeling energized. You recalled her messages yesterday, on the contest to grind gold in the game.
+    You wake up feeling energized. You recalled the messages from [lady_name] yesterday, on the contest to grind gold in the game.
 
     You have promised her to do whatever it takes to help, and is planning to grind two million gold, minimum.
 
-    As you get out of bed and start your day, thoughts of her and how you can help her fill your mind. You're determined to make a difference, starting today.
+    As you get out of bed and start your day, thoughts of [lady_name] and how you can help her fill your mind. You are determined to make a difference, starting today.
     """
 
     scene bg room
@@ -60,7 +62,7 @@ label start:
     show hero
     with dissolve
 
-    hero "Alright, we doing this. I'm gonna stream with the boys, play some pumped up Rus-{w=1.0} Spanish music,{w=1.0} and grind."
+    hero "Alright, we doing this. I am gonna stream with the boys, play some pumped up Rus-{w=0.5} Spanish music,{w=0.5} and grind."
     hero "And then..."
 
     show bg dream
@@ -93,7 +95,7 @@ menu:
     "Sure!":
         $ tutorial_started = True
         jump tutorial_start
-    "Naaaah, naaaah, I'm not a pussy":
+    "Naaaah, naaaah, I am not a pussy":
         "My man!"
         jump start_day
 
@@ -133,16 +135,16 @@ menu:
         $ energy = 100
 
         """
-        That's the short of it. Good luck!
+        That is the short of it. Good luck!
         """
 
     "Naaaah, naaaah, you trolling":
         $ tutorial_self_punch_deny_count += 1
 
         if tutorial_self_punch_deny_count <= 3:
-            "Come on, I'm gonna softlock you here because I am a lazy dev :^)"
+            "Come on, I am gonna softlock you here because I am a lazy dev :^)"
         elif tutorial_self_punch_deny_count > 3 and tutorial_self_punch_deny_count <= 5:
-            "I told you I'm lazy :^)"
+            "I told you I am lazy :^)"
         else:
             $ tutorial_skip_self_punch = True
             "You sure are persistent :^("
@@ -160,55 +162,59 @@ label start_day:
 # ========================================
 label day_actions:
     if hour_current >= hour_max:
+        hero "It is time!"
+        jump judgement_day
+    elif gold_amount >= gold_goal:
+        hero "I have done it! I have enough gold now!"
         jump judgement_day
 
     if hour_current == 1:
         hero "Plenty of things to do!"
 
     elif energy == 0:
-        if 'tired_max' not in renpy.get_attributes(tag="hero"):
+        if "tired_max" not in renpy.get_attributes(tag="hero"):
             show hero tired_max
             with dissolve
 
-        hero "I'm completely wasted... I need to get some sleep!"
+        hero "I am completely wasted... I need to get some sleep!"
 
     elif energy <= 20:
-        if 'tired_medium' not in renpy.get_attributes(tag="hero"):
+        if "tired_medium" not in renpy.get_attributes(tag="hero"):
             show hero tired_medium
             with dissolve
 
-        hero "I'm getting kinda tired..."
+        hero "I am getting kinda tired..."
 
 menu:
     "Play game":
         if energy + grind_energy <= 0:
-            hero "I don't have enough energy to grind the game right now..."
+            hero "I do not have enough energy to grind the game right now..."
             jump day_actions
 
-        $ actions.append('game')
+        $ actions.append("game")
         $ energy = clamp(energy + grind_energy, 0, 100)
         $ hour_current += grind_hour
 
         $ current_gold = renpy.random.randint(20000, 50000)
         $ current_gold_display = f"{current_gold:,}"
 
-        $ gold_total += current_gold
+        $ gold_amount += current_gold
         "You have grinded [current_gold_display] gold!"
 
         jump day_actions
 
     # "Check room":
-    #     $ actions.append('check_room')
+    #     $ actions.append("check_room")
     #     jump check_room
 
     "Drink a BlueCow":
         if energy == 0:
-            hero "I am too weak for a BlueCow right now... I should get some sleep."
+            hero "I am too weak for a BlueCow right now..."
             jump day_actions
 
-        $ actions.append('redbull')
+        $ actions.append("redbull")
         $ redbull_total += 1
-        $ redbull_current_count = actions[-6:].count('redbull')
+        $ redbull_current_count = actions[-6:].count("redbull")
 
         show hero drink
         with dissolve
@@ -255,7 +261,7 @@ menu:
         jump day_actions
 
     "Sleep":
-        $ actions.append('sleep')
+        $ actions.append("sleep")
         $ initial_energy = energy
         $ energy = clamp(energy + sleep_energy, 0, 100)
         $ current_sleep_hour = sleep_hour + renpy.random.randint(0, 3)
@@ -322,8 +328,100 @@ label redbull_overdose:
 # judgement day
 # ========================================
 label judgement_day:
+    if gold_amount >= gold_goal:
+        jump judgement_day_success
+    else:
+        jump judgement_day_failure
+
+label judgement_day_success:
+    scene bg judgment
+    show hero judgement_happy
+    hide screen stats
+    with dissolve
+
+    hero "I made it!"
+
+    jump the_end
+
+label judgement_day_failure:
+    scene bg judgment
+    show hero sad
+    hide screen stats
+    with dissolve
+
+    hero "I... I did not make it! There was not enough time... Stupid fucking mistakes, man!"
+
+    "You realized that you were not able to grind enough gold to impress [lady_name]. You feel discouraged and disheartened."
+
+    hero "How do I even face her..."
+
+    show hero sad at left
+    show lady at right
+    with dissolve
+
+    lady "Hey, Magut! How did the grind go?"
+
+    hero "W-well... ahaha... {w=0.5} it is what it is!"
+
+    $ gold_amount_display = f"{gold_amount:,}"
+    "You nervously traded over the sum of [gold_amount_display] gold, hoping for the best."
+
+    hero "I... did my best... but I did not have enough time."
+
+    show hero at left
+    with dissolve
+
+    hero "It is not much, but I hope you can win the contest, [lady_name]!"
+
+    show lady happy at right
+    with dissolve
+    lady "Thanks Magut! That is so kind of you."
+
+    show lady at right
+    with dissolve
+    lady "I appreciate it."
+    lady "I gotta attend to my stream for a bit, I will talk to you later?"
+    hero "Haha, sure!"
+    lady "Goodbye!"
+
+    show hero sad at center
+    hide lady
+    with dissolve
+
     """
-    lets check
+    As the blip of [lady_name]'s presence icon turn offline, you felt a tinge of sadness in your heart.
+
+    It was not the outcome you had hoped for, but you have tried your very best...
     """
 
+    if redbull_total > 10:
+        "...with [redbull_total] cans of BlueCow."
+
+    show hero
+    with dissolve
+
+    hero "It is what it is... what could you do about it, right?"
+    hero "I think..."
+    hero "I think I will go to gym..."
+
+    hide hero
+    with dissolve
+
+    """
+    In the end, you realized that you had been too focused on impressing her and had neglected to see the value in the friendships that you had built along the way.
+
+    Sometimes it is not about the gifts or the material things, but about the connections and relationships that we build.
+
+    You closed your computer, feeling grateful for the experience and the lessons learned.
+
+    Ready to face new challenges with a positive mindset.
+    """
+
+    jump the_end
+
+# ========================================
+# end
+# ========================================
+label the_end:
+    "-- END --"
     return
